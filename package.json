@@ -1,11 +1,12 @@
 {
   "name": "@lintang16/file-mapper-mcp",
   "version": "1.1.0",
-  "description": "MCP server untuk memetakan struktur direktori, mencari, dan membaca file dengan aman",
+  "description": "Codebase Architect MCP — menganalisis arsitektur project (tech stack, framework, entry point, komposisi kode), memetakan struktur direktori, mencari, dan membaca file dengan aman.",
   "type": "module",
   "main": "build/index.js",
   "bin": {
-    "file-mapper-mcp": "build/index.js"
+    "file-mapper-mcp": "build/index.js",
+    "codebase-architect-mcp": "build/index.js"
   },
   "files": [
     "build"
@@ -18,7 +19,10 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "filesystem"
+    "filesystem",
+    "codebase-architect",
+    "architecture-analysis",
+    "tech-stack-detection"
   ],
   "license": "MIT",
   "dependencies": {

@@ -1,5 +1,6 @@
 import path from "node:path";
 import type { DirectoryNode, FileEntry, SearchResult } from "./filesystem.js";
+import type { ArchitectureAnalysis } from "./architecture.js";
 
 /** Ikon sederhana berdasarkan tipe entry, biar tree enak dibaca. */
 function iconFor(type: FileEntry["type"]): string {
@@ -180,5 +181,62 @@ export function fileContentToMarkdown(
     )} (dipotong).\n\n`;
   }
   md += `${fence}${lang}\n${content}\n${fence}\n`;
+  return md;
+}
+
+/** Merender hasil analyze_architecture sebagai laporan Markdown yang enak dibaca. */
+export function architectureToMarkdown(analysis: ArchitectureAnalysis): string {
+  let md = `## 🏛️ Analisis Arsitektur: \`${analysis.rootPath}\`\n\n`;
+
+  // Tech stack
+  if (analysis.ecosystems.length === 0) {
+    md += `### Tech Stack\n\n_Tidak terdeteksi manifest project yang dikenali (package.json, requirements.txt, dst)._\n\n`;
+  } else {
+    md += `### 🧩 Tech Stack\n\n`;
+    for (const eco of analysis.ecosystems) {
+      md += `**${eco.ecosystem}** (deteksi dari \`${eco.manifestFile}\`)\n`;
+      if (eco.frameworks.length > 0) {
+        md += `- Framework/library terdeteksi: ${eco.frameworks.map((f) => `\`${f}\``).join(", ")}\n`;
+      }
+      md += `- Total dependencies: ${eco.dependencies.length}, devDependencies: ${eco.devDependencies.length}\n\n`;
+    }
+  }
+
+  // Entry points
+  md += `### 🚪 Entry Point\n\n`;
+  if (analysis.entryPoints.length === 0) {
+    md += `_Tidak ditemukan entry point yang umum dikenali._\n\n`;
+  } else {
+    for (const e of analysis.entryPoints) md += `- \`${e}\`\n`;
+    md += "\n";
+  }
+
+  // Language breakdown
+  md += `### 📊 Komposisi Kode\n\n`;
+  md += `Total **${analysis.totalFiles}** file kode, **${analysis.totalLines.toLocaleString(
+    "id-ID"
+  )}** baris.\n\n`;
+  if (analysis.languageBreakdown.length > 0) {
+    md += `| Ekstensi | Jumlah File | Jumlah Baris |\n|---|---|---|\n`;
+    for (const l of analysis.languageBreakdown.slice(0, 15)) {
+      md += `| \`${l.extension}\` | ${l.fileCount} | ${l.lineCount.toLocaleString("id-ID")} |\n`;
+    }
+    md += "\n";
+  }
+
+  // Config files
+  md += `### ⚙️ File Konfigurasi Terdeteksi\n\n`;
+  if (analysis.configFiles.length === 0) {
+    md += `_Tidak ada file konfigurasi umum yang terdeteksi._\n\n`;
+  } else {
+    md += analysis.configFiles.map((f) => `\`${f}\``).join(", ") + "\n\n";
+  }
+
+  // Infra signals
+  md += `### 🏗️ Sinyal Infrastruktur\n\n`;
+  md += `- Docker: ${analysis.hasDocker ? "✅ Terdeteksi" : "❌ Tidak ada"}\n`;
+  md += `- CI/CD: ${analysis.hasCI ? "✅ Terdeteksi" : "❌ Tidak ada"}\n`;
+  md += `- Testing setup: ${analysis.hasTests ? "✅ Terdeteksi" : "❌ Tidak ada"}\n`;
+
   return md;
 }
