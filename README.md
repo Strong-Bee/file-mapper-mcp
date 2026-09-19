@@ -1,103 +1,198 @@
 # file-mapper-mcp
 
-**Secure, lightweight, cross-platform MCP server for exploring, mapping, searching, and reading project files with AI agents.**
+[![npm version](https://img.shields.io/npm/v/@lintang16/file-mapper-mcp.svg)](https://www.npmjs.com/package/@lintang16/file-mapper-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@lintang16/file-mapper-mcp.svg)](https://www.npmjs.com/package/@lintang16/file-mapper-mcp)
+[![GitHub](https://img.shields.io/github/stars/Strong-Bee/file-mapper-mcp?style=social)](https://github.com/Strong-Bee/file-mapper-mcp)
+[![License](https://img.shields.io/github/license/Strong-Bee/file-mapper-mcp)](https://github.com/Strong-Bee/file-mapper-mcp)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-MCP-purple.svg)](https://modelcontextprotocol.io/)
 
-`file-mapper-mcp` adalah **Model Context Protocol (MCP) server** berbasis **Node.js + TypeScript** yang memungkinkan AI agent seperti Claude Desktop, Cursor, dan MCP-compatible clients untuk memahami struktur dan isi project secara aman.
+# 🔎 file-mapper-mcp
 
-Server menyediakan tools untuk:
+**Secure, lightweight, cross-platform filesystem MCP server for AI coding agents.**
 
-* Memetakan struktur direktori secara rekursif
-* Menampilkan isi direktori
-* Mencari file berdasarkan nama atau pola wildcard
-* Mencari teks di dalam file
-* Membaca metadata file
-* Membaca isi file teks
-* Menghasilkan output Markdown atau JSON
-* Membatasi akses filesystem menggunakan allowed root directory
-* Mencegah path traversal seperti `../../etc/passwd`
+`@lintang16/file-mapper-mcp` adalah **Model Context Protocol (MCP) server** berbasis Node.js dan TypeScript yang memberikan AI agent akses terstruktur dan aman ke filesystem project.
 
-Cocok digunakan untuk **AI coding agents, developer tools, repository analysis, codebase exploration, automation, MCP clients, dan local development workflows**.
+Dengan server ini, MCP-compatible AI clients dapat:
 
----
+* 📁 Memetakan struktur project
+* 🔍 Mencari file
+* 📝 Mencari teks di dalam file
+* 📄 Membaca source code
+* 📊 Membaca metadata file
+* 🧠 Memahami codebase secara bertahap
+* 🔐 Mengakses filesystem hanya pada root directory yang diizinkan
 
-## ✨ Features
-
-* 🔍 **Directory Mapping** — tampilkan struktur project secara rekursif
-* 📁 **Directory Listing** — lihat isi direktori tanpa recursive traversal
-* 🔎 **File Search** — cari file menggunakan wildcard `*` dan `?`
-* 📝 **Content Search** — cari teks di dalam source code dan text files
-* 📄 **File Reader** — baca file teks dengan batas ukuran
-* 📊 **File Metadata** — ukuran, tipe, path, dan waktu modifikasi
-* 🔐 **Filesystem Security** — akses dibatasi ke root directory yang diizinkan
-* 🛡️ **Path Traversal Protection** — mencegah akses keluar dari allowed root
-* 🧾 **Markdown Output** — output mudah dibaca oleh AI maupun manusia
-* 🔧 **JSON Output** — cocok untuk automation dan programmatic processing
-* 🌐 **Cross Platform** — Windows, Linux, dan macOS
-* ⚡ **Lightweight** — tanpa database dan tanpa external service
-* 🤖 **MCP Native** — menggunakan Model Context Protocol SDK
-* 📦 **npm Ready** — dapat digunakan sebagai package/CLI
+Project ini dirancang untuk **AI coding agents, Claude Desktop, Cursor, developer tools, local AI agents, repository analysis, dan automated codebase exploration**.
 
 ---
 
-## 🧠 Why file-mapper-mcp?
+# ✨ Features
 
-AI coding agents sering membutuhkan konteks project sebelum dapat memahami atau memodifikasi codebase.
+* 🔎 Recursive directory mapping
+* 📁 Non-recursive directory listing
+* 🔍 Filename search
+* 📝 Text/content search
+* 📄 Text file reader
+* 📊 File metadata inspection
+* 🔐 Root directory access control
+* 🛡️ Path traversal protection
+* 🧾 Markdown output
+* 🗂️ JSON output
+* ⚡ Lightweight architecture
+* 🌐 Windows / Linux / macOS
+* 🤖 Native MCP server
+* 📦 npm package
+* 🧩 Compatible with MCP clients supporting stdio
+* 🛠️ Built with TypeScript
+* 🚫 Ignores common build/cache directories
 
-Tanpa filesystem tools yang terstruktur, agent dapat:
+---
 
-* membaca terlalu banyak file,
-* menghabiskan context window,
-* melakukan pencarian berulang,
-* menerima informasi yang tidak relevan,
-* atau mencoba mengakses path yang tidak seharusnya.
+# 🧠 Why file-mapper-mcp?
 
-`file-mapper-mcp` menyediakan filesystem interface yang terstruktur sehingga AI agent dapat melakukan workflow:
+AI coding agents membutuhkan konteks codebase sebelum dapat melakukan analisis atau perubahan kode.
+
+Daripada memberikan seluruh project kepada AI sekaligus, `file-mapper-mcp` memungkinkan agent mengeksplorasi project secara bertahap:
 
 ```text
-Project
-   │
-   ├── map_directory
-   │       ↓
-   │   Understand structure
-   │
-   ├── list_directory
-   │       ↓
-   │   Inspect directory
-   │
-   ├── search_files
-   │       ↓
-   │   Find relevant files
-   │
-   ├── file_info
-   │       ↓
-   │   Inspect metadata
-   │
-   └── read_file
-           ↓
-       Read only required content
+┌──────────────────────┐
+│     Project Root     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│   map_directory      │
+│ Understand structure │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│   list_directory     │
+│ Inspect directories  │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    search_files      │
+│ Find relevant files  │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│      file_info       │
+│ Inspect metadata     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│      read_file       │
+│ Read required code   │
+└──────────────────────┘
 ```
 
-Pendekatan ini dapat membantu **mengurangi context yang tidak diperlukan dan membuat filesystem exploration lebih terarah**.
+Pendekatan ini membantu agent mendapatkan **konteks yang relevan tanpa harus membaca seluruh repository**.
 
 ---
 
-# 🛠️ Available Tools
+# 📦 Installation
+
+## Install from npm
+
+```bash
+npm i @lintang16/file-mapper-mcp
+```
+
+atau:
+
+```bash
+npm install @lintang16/file-mapper-mcp
+```
+
+Package:
+
+```text
+@lintang16/file-mapper-mcp
+```
+
+---
+
+# 🌍 Global Installation
+
+Untuk menggunakan CLI secara global:
+
+```bash
+npm i -g @lintang16/file-mapper-mcp
+```
+
+Kemudian:
+
+```bash
+file-mapper-mcp
+```
+
+Periksa instalasi:
+
+```bash
+npm list -g @lintang16/file-mapper-mcp
+```
+
+---
+
+# 🚀 Quick Start
+
+Install:
+
+```bash
+npm i @lintang16/file-mapper-mcp
+```
+
+Tentukan directory project:
+
+### Linux / macOS
+
+```bash
+FILE_MAPPER_ROOT=/path/to/project file-mapper-mcp
+```
+
+### Windows PowerShell
+
+```powershell
+$env:FILE_MAPPER_ROOT = "D:\Projects\my-project"
+file-mapper-mcp
+```
+
+### Windows CMD
+
+```cmd
+set FILE_MAPPER_ROOT=D:\Projects\my-project
+file-mapper-mcp
+```
+
+Jika `FILE_MAPPER_ROOT` tidak ditentukan, server menggunakan current working directory sebagai root.
+
+---
+
+# 🛠️ MCP Tools
+
+`file-mapper-mcp` menyediakan lima tools utama.
 
 | Tool             | Description                                   |
 | ---------------- | --------------------------------------------- |
-| `map_directory`  | Memetakan struktur direktori secara rekursif  |
-| `list_directory` | Menampilkan isi satu direktori                |
-| `search_files`   | Mencari file berdasarkan nama dan/atau isi    |
-| `file_info`      | Mengambil metadata sebuah file atau directory |
+| `map_directory`  | Memetakan struktur directory secara recursive |
+| `list_directory` | Menampilkan isi directory                     |
+| `search_files`   | Mencari file berdasarkan nama dan isi         |
+| `file_info`      | Mengambil metadata file/directory             |
 | `read_file`      | Membaca isi file teks                         |
 
 ---
 
-## `map_directory`
+# 📁 map_directory
 
-Memetakan directory tree secara recursive.
+Memetakan struktur directory secara recursive.
 
-Contoh konsep output:
+Contoh:
 
 ```text
 project/
@@ -106,20 +201,14 @@ project/
 │   ├── server.ts
 │   └── utils/
 │       └── filesystem.ts
+├── public/
+│   └── favicon.ico
 ├── package.json
 ├── tsconfig.json
 └── README.md
 ```
 
-Parameter yang tersedia dapat mencakup:
-
-* root/path
-* maximum depth
-* include hidden files
-* include files
-* output format
-
-Contoh:
+Contoh penggunaan:
 
 ```json
 {
@@ -128,9 +217,11 @@ Contoh:
 }
 ```
 
+Cocok digunakan ketika AI agent pertama kali mempelajari sebuah repository.
+
 ---
 
-## `list_directory`
+# 📂 list_directory
 
 Menampilkan isi langsung sebuah directory tanpa recursive traversal.
 
@@ -142,19 +233,30 @@ Contoh:
 }
 ```
 
-Cocok untuk agent yang hanya membutuhkan konteks satu directory.
+Output konseptual:
+
+```text
+src/
+├── index.ts
+├── server.ts
+├── tools/
+└── utils/
+```
+
+Tool ini berguna ketika agent hanya membutuhkan konteks satu directory.
 
 ---
 
-## `search_files`
+# 🔍 search_files
 
-Mencari file menggunakan:
+Mencari file berdasarkan pola nama.
 
-* filename pattern
-* wildcard `*`
-* wildcard `?`
-* optional text/content search
-* result limit
+Mendukung wildcard:
+
+```text
+*
+?
+```
 
 Contoh:
 
@@ -165,17 +267,22 @@ Contoh:
 }
 ```
 
-Contoh pencarian berdasarkan nama:
+Contoh pattern:
 
 ```text
 *.ts
 *.tsx
 *.js
+*.jsx
 *.json
+*.md
 README*
+.env*
 ```
 
-Contoh konsep content search:
+Content search juga dapat digunakan untuk menemukan teks tertentu di dalam file.
+
+Contoh:
 
 ```json
 {
@@ -185,11 +292,23 @@ Contoh konsep content search:
 }
 ```
 
+Ini berguna untuk menemukan:
+
+* function
+* class
+* imports
+* API endpoint
+* configuration
+* environment variable
+* component
+* service
+* database query
+
 ---
 
-## `file_info`
+# 📄 file_info
 
-Mengambil metadata file atau directory.
+Mengambil informasi metadata sebuah file atau directory.
 
 Informasi dapat mencakup:
 
@@ -208,9 +327,11 @@ Contoh:
 }
 ```
 
+Tool ini berguna sebelum agent membaca file yang besar atau menentukan jenis resource.
+
 ---
 
-## `read_file`
+# 📖 read_file
 
 Membaca isi file teks.
 
@@ -222,9 +343,9 @@ Contoh:
 }
 ```
 
-Dapat digunakan dengan batas ukuran dan line range untuk menghindari pembacaan file yang terlalu besar.
+Untuk file besar, pembacaan dapat dibatasi menggunakan line range atau maximum size sesuai parameter yang tersedia.
 
-Contoh konsep:
+Contoh:
 
 ```json
 {
@@ -234,192 +355,191 @@ Contoh konsep:
 }
 ```
 
-Untuk kebutuhan machine processing, tool dapat menggunakan format:
+Hal ini memungkinkan AI agent membaca hanya bagian code yang dibutuhkan.
+
+---
+
+# 🧾 Output Format
+
+Secara default, output dibuat dalam format **Markdown** agar mudah dibaca oleh AI agent dan developer.
+
+Contoh directory tree:
+
+```markdown
+- src/
+  - index.ts
+  - tools/
+    - search-files.ts
+  - utils/
+    - security.ts
+- package.json
+- tsconfig.json
+```
+
+Untuk kebutuhan programmatic processing, tool dapat menggunakan:
 
 ```text
-markdown
-json
+format: "json"
+```
+
+Contoh:
+
+```json
+{
+  "format": "json"
+}
+```
+
+Untuk `read_file`, tersedia mode:
+
+```text
 raw
 ```
 
-`raw` khusus digunakan untuk kebutuhan pembacaan isi file tanpa formatting Markdown.
+jika membutuhkan isi file tanpa Markdown formatting.
 
 ---
 
 # 🔐 Security
 
-Security adalah salah satu bagian utama dari `file-mapper-mcp`.
+Security merupakan bagian penting dari `file-mapper-mcp`.
 
-Semua path divalidasi melalui:
+Semua filesystem path divalidasi melalui:
 
 ```text
 src/utils/security.ts
 ```
 
-Server memastikan path yang diminta berada di dalam directory root yang diizinkan.
-
-Contoh path yang seharusnya ditolak:
+Server membatasi akses filesystem berdasarkan:
 
 ```text
-../../etc/passwd
+FILE_MAPPER_ROOT
+```
+
+Contoh:
+
+```text
+D:\Projects\my-project
+```
+
+Jika agent mencoba:
+
+```text
+../../secret.txt
 ```
 
 atau:
 
 ```text
-../../../secret.txt
+../../../etc/passwd
 ```
 
-atau path lain yang mencoba keluar dari allowed root.
+path tersebut akan ditolak apabila berada di luar allowed root.
 
-## Allowed Root
+---
 
-Gunakan environment variable:
+# 🛡️ Path Traversal Protection
+
+Server dirancang untuk mencegah filesystem traversal seperti:
+
+```text
+../../etc/passwd
+../../../private/key
+../../.ssh/id_rsa
+```
+
+Akses hanya diperbolehkan pada directory yang telah ditentukan.
+
+### Recommended
+
+Gunakan root yang spesifik:
+
+```text
+D:\Projects\my-project
+```
+
+Hindari:
+
+```text
+C:\
+```
+
+atau:
+
+```text
+/
+```
+
+jika agent tidak benar-benar membutuhkan seluruh filesystem.
+
+---
+
+# ⚙️ Configuration
+
+Environment variable utama:
+
+| Variable           | Required | Description                                   |
+| ------------------ | -------- | --------------------------------------------- |
+| `FILE_MAPPER_ROOT` | No       | Root filesystem yang dapat diakses MCP server |
+
+Contoh Linux:
+
+```bash
+export FILE_MAPPER_ROOT=/home/user/projects/my-app
+```
+
+Contoh macOS:
+
+```bash
+export FILE_MAPPER_ROOT=/Users/user/projects/my-app
+```
+
+Contoh Windows:
+
+```powershell
+$env:FILE_MAPPER_ROOT = "D:\Projects\my-app"
+```
+
+Jika tidak diset:
 
 ```text
 FILE_MAPPER_ROOT
 ```
 
-Contoh:
-
-```bash
-FILE_MAPPER_ROOT=/home/user/projects/my-app
-```
-
-Jika environment variable tidak diberikan, server menggunakan:
+akan menggunakan:
 
 ```text
 process.cwd()
 ```
 
-sebagai root directory.
-
-> **Security recommendation:** gunakan root directory sesempit mungkin. Jangan memberikan root seperti `/`, `C:\`, atau home directory jika agent hanya membutuhkan satu project.
-
 ---
 
-# 📦 Installation
+# 🤖 Claude Desktop
 
-## Clone repository
-
-```bash
-git clone https://github.com/Strong-Bee/file-mapper-mcp.git
-cd file-mapper-mcp
-```
-
-## Install dependencies
+Setelah package di-install:
 
 ```bash
-npm install
+npm i -g @lintang16/file-mapper-mcp
 ```
 
-## Build project
-
-```bash
-npm run build
-```
-
-Setelah build berhasil:
-
-```text
-build/index.js
-```
-
-akan menjadi entry point MCP server.
-
----
-
-# ▶️ Running
-
-## Linux / macOS
-
-```bash
-FILE_MAPPER_ROOT=/path/to/project node build/index.js
-```
-
-Contoh:
-
-```bash
-FILE_MAPPER_ROOT=/home/user/projects/my-app node build/index.js
-```
-
-## Windows PowerShell
-
-```powershell
-$env:FILE_MAPPER_ROOT = "D:\Projects\my-app"
-node build/index.js
-```
-
-## Windows CMD
-
-```cmd
-set FILE_MAPPER_ROOT=D:\Projects\my-app
-node build/index.js
-```
-
-### PowerShell note
-
-Environment variable dengan format:
-
-```powershell
-$env:FILE_MAPPER_ROOT = "D:\Projects\my-app"
-```
-
-hanya berlaku untuk sesi terminal tersebut.
-
-Jika tidak dikonfigurasi:
-
-```text
-FILE_MAPPER_ROOT
-```
-
-server menggunakan current working directory.
-
----
-
-# 🤖 Claude Desktop Configuration
-
-Tambahkan MCP server ke konfigurasi Claude Desktop.
-
-Contoh:
+Gunakan konfigurasi MCP:
 
 ```json
 {
   "mcpServers": {
     "file-mapper": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/file-mapper-mcp/build/index.js"
-      ],
+      "command": "file-mapper-mcp",
       "env": {
-        "FILE_MAPPER_ROOT": "/path/to/project"
+        "FILE_MAPPER_ROOT": "D:\\Projects\\my-project"
       }
     }
   }
 }
 ```
 
-Contoh Windows:
+Restart Claude Desktop.
 
-```json
-{
-  "mcpServers": {
-    "file-mapper": {
-      "command": "node",
-      "args": [
-        "D:\\Apk\\file-mapper-mcp\\build\\index.js"
-      ],
-      "env": {
-        "FILE_MAPPER_ROOT": "D:\\Projects\\my-app"
-      }
-    }
-  }
-}
-```
-
-Setelah konfigurasi selesai, restart Claude Desktop.
-
-Tools berikut akan tersedia:
+Tools yang tersedia:
 
 ```text
 map_directory
@@ -431,22 +551,179 @@ read_file
 
 ---
 
-# 🧩 MCP Client Configuration
+# 🪟 Windows Claude Desktop
 
-Karena server menggunakan **stdio transport**, server dapat digunakan oleh MCP-compatible clients yang mendukung local stdio servers.
-
-Konsep konfigurasi:
+Contoh konfigurasi:
 
 ```json
 {
-  "command": "node",
+  "mcpServers": {
+    "file-mapper": {
+      "command": "file-mapper-mcp",
+      "env": {
+        "FILE_MAPPER_ROOT": "D:\\Apk\\my-project"
+      }
+    }
+  }
+}
+```
+
+Perhatikan bahwa backslash dalam JSON harus ditulis sebagai:
+
+```text
+\\
+```
+
+Contoh:
+
+```text
+D:\\Apk\\my-project
+```
+
+bukan:
+
+```text
+D:\Apk\my-project
+```
+
+---
+
+# 🧩 Local npm Installation
+
+Jika package hanya di-install pada project:
+
+```bash
+npm i @lintang16/file-mapper-mcp
+```
+
+Anda dapat menggunakan binary dari:
+
+```text
+node_modules/.bin/file-mapper-mcp
+```
+
+atau melalui konfigurasi client:
+
+```json
+{
+  "command": "npx",
   "args": [
-    "/path/to/file-mapper-mcp/build/index.js"
+    "@lintang16/file-mapper-mcp"
   ],
   "env": {
     "FILE_MAPPER_ROOT": "/path/to/project"
   }
 }
+```
+
+> Untuk penggunaan production/local development yang stabil, instalasi package secara eksplisit lebih disarankan daripada mengandalkan package resolution secara dinamis.
+
+---
+
+# 🧠 AI Agent Workflow
+
+Workflow yang direkomendasikan:
+
+```text
+1. map_directory
+       ↓
+2. list_directory
+       ↓
+3. search_files
+       ↓
+4. file_info
+       ↓
+5. read_file
+```
+
+Contoh:
+
+```text
+AI Agent
+   │
+   ├── "Saya perlu memahami project"
+   │
+   ▼
+map_directory
+   │
+   ▼
+"src/, app/, lib/, package.json..."
+   │
+   ▼
+search_files
+   │
+   ▼
+"Temukan authentication service"
+   │
+   ▼
+file_info
+   │
+   ▼
+read_file
+   │
+   ▼
+Analyze code
+```
+
+Workflow ini memungkinkan agent melakukan **progressive codebase exploration**.
+
+---
+
+# 🚫 Ignored Directories
+
+Untuk mengurangi noise ketika melakukan repository exploration, filesystem traversal mengabaikan directory yang umumnya tidak diperlukan:
+
+```text
+.git
+node_modules
+.next
+dist
+build
+.dart_tool
+.gradle
+.idea
+coverage
+__pycache__
+```
+
+Directory tersebut biasanya berisi:
+
+* dependencies
+* build artifacts
+* cache
+* IDE metadata
+* generated files
+* test coverage
+* compiled output
+
+---
+
+# 💻 Supported Platforms
+
+`file-mapper-mcp` dirancang cross-platform.
+
+### Windows
+
+```text
+Windows 10+
+Windows 11
+```
+
+### Linux
+
+```text
+Ubuntu
+Debian
+Fedora
+Arch Linux
+dan distribusi Linux lainnya
+```
+
+### macOS
+
+```text
+Intel
+Apple Silicon
 ```
 
 ---
@@ -455,6 +732,7 @@ Konsep konfigurasi:
 
 ```text
 file-mapper-mcp/
+│
 ├── src/
 │   ├── index.ts
 │   │
@@ -470,16 +748,28 @@ file-mapper-mcp/
 │       ├── markdown.ts
 │       └── security.ts
 │
-├── .gitignore
 ├── package.json
 ├── package-lock.json
 ├── tsconfig.json
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
 # 🧑‍💻 Development
+
+Clone repository:
+
+```bash
+git clone https://github.com/Strong-Bee/file-mapper-mcp.git
+```
+
+Masuk directory:
+
+```bash
+cd file-mapper-mcp
+```
 
 Install dependencies:
 
@@ -493,246 +783,112 @@ Build:
 npm run build
 ```
 
-Start:
+Run:
 
 ```bash
 npm start
 ```
 
-Development/watch mode:
+Development/watch:
 
 ```bash
 npm run dev
 ```
 
-Build command:
+---
+
+# 📜 NPM Scripts
+
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm install`   | Install dependencies     |
+| `npm run build` | Compile TypeScript       |
+| `npm start`     | Run compiled MCP server  |
+| `npm run dev`   | Watch TypeScript changes |
+
+---
+
+# 📦 NPM Package
+
+Official package:
+
+```text
+@lintang16/file-mapper-mcp
+```
+
+Install:
 
 ```bash
-npm run build
+npm i @lintang16/file-mapper-mcp
 ```
 
-menghasilkan:
+NPM package:
 
 ```text
-build/
-└── index.js
+https://www.npmjs.com/package/@lintang16/file-mapper-mcp
+```
+
+GitHub repository:
+
+```text
+https://github.com/Strong-Bee/file-mapper-mcp
 ```
 
 ---
 
-# ⚙️ Environment Variables
+# 🧪 Testing Installation
 
-| Variable           | Required | Description                              |
-| ------------------ | -------- | ---------------------------------------- |
-| `FILE_MAPPER_ROOT` | No       | Root directory yang boleh diakses server |
+Set root:
 
-Contoh:
-
-```env
-FILE_MAPPER_ROOT=D:\Projects\my-app
+```powershell
+$env:FILE_MAPPER_ROOT = "D:\Projects\test-project"
 ```
 
-atau:
+Run:
 
-```env
-FILE_MAPPER_ROOT=/home/user/projects/my-app
+```powershell
+file-mapper-mcp
 ```
 
----
-
-# 📊 Output Formats
-
-Secara default, tools menggunakan output **Markdown** yang mudah dibaca oleh AI agent dan developer.
-
-Contoh directory tree:
-
-```markdown
-- src/
-  - index.ts
-  - server.ts
-- package.json
-- tsconfig.json
-```
-
-Contoh metadata:
-
-```markdown
-| Property | Value |
-|---|---|
-| Type | file |
-| Size | 2048 bytes |
-| Modified | 2026-09-19 |
-```
-
-Untuk kebutuhan automation atau programmatic processing, gunakan:
-
-```text
-format: "json"
-```
-
-Contoh konsep:
-
-```json
-{
-  "format": "json"
-}
-```
-
-Untuk `read_file`, tersedia mode:
-
-```text
-format: "raw"
-```
-
-jika diperlukan output isi file tanpa Markdown wrapping.
-
----
-
-# 🧠 AI Agent Workflow
-
-Contoh workflow yang direkomendasikan untuk AI coding agent:
-
-### 1. Map project
+Jika server berhasil berjalan, MCP client dapat melakukan discovery terhadap tools:
 
 ```text
 map_directory
-```
-
-Agent mendapatkan gambaran struktur project.
-
-### 2. Inspect relevant directory
-
-```text
 list_directory
-```
-
-Agent mempersempit konteks.
-
-### 3. Search relevant files
-
-```text
 search_files
-```
-
-Agent menemukan file yang relevan.
-
-### 4. Inspect metadata
-
-```text
 file_info
-```
-
-Agent memeriksa file sebelum membacanya.
-
-### 5. Read required content
-
-```text
 read_file
 ```
 
-Agent hanya membaca file yang diperlukan.
-
-Workflow tersebut membantu menghindari kebutuhan untuk memasukkan seluruh codebase ke context AI sekaligus.
-
 ---
 
-# 🚫 Ignored Directories
+# 🐛 Troubleshooting
 
-Filesystem traversal mengabaikan directory yang umumnya tidak relevan untuk codebase exploration, seperti:
+## `file-mapper-mcp` is not recognized
+
+Jika Windows menampilkan:
 
 ```text
-.git
-node_modules
-.next
-dist
-build
-.dart_tool
-.gradle
-.idea
-coverage
-__pycache__
+'file-mapper-mcp' is not recognized
 ```
 
-Hal ini membantu mengurangi noise ketika AI agent melakukan repository exploration.
+pastikan package di-install secara global:
 
----
-
-# 🎯 Use Cases
-
-`file-mapper-mcp` dapat digunakan untuk:
-
-* AI coding assistants
-* MCP development
-* Claude Desktop
-* Cursor workflows
-* Repository analysis
-* Codebase exploration
-* Local AI agents
-* Autonomous coding agents
-* Developer automation
-* Project documentation
-* Source code analysis
-* Debugging workflows
-* Software architecture analysis
-* AI-powered code review
-* Local filesystem inspection
-* Monorepo exploration
-
----
-
-# 🚀 Example Use Case
-
-Misalnya sebuah AI agent perlu memahami project:
-
-```text
-D:\Projects\my-next-app
+```bash
+npm i -g @lintang16/file-mapper-mcp
 ```
 
-Konfigurasi:
+Kemudian periksa:
 
-```json
-{
-  "mcpServers": {
-    "file-mapper": {
-      "command": "node",
-      "args": [
-        "D:\\Apk\\file-mapper-mcp\\build\\index.js"
-      ],
-      "env": {
-        "FILE_MAPPER_ROOT": "D:\\Projects\\my-next-app"
-      }
-    }
-  }
-}
-```
-
-Agent kemudian dapat melakukan:
-
-```text
-map_directory
-        ↓
-src/
-app/
-components/
-lib/
-package.json
-        ↓
-search_files
-        ↓
-components/**/*.tsx
-        ↓
-read_file
-        ↓
-Analyze required code
+```bash
+npm list -g @lintang16/file-mapper-mcp
 ```
 
 ---
-
-# 🔧 Troubleshooting
 
 ## `build/index.js` tidak ditemukan
 
-Jalankan:
+Jika menjalankan source repository:
 
 ```bash
 npm run build
@@ -746,33 +902,11 @@ node build/index.js
 
 ---
 
-## Permission denied
+## Root directory tidak ditemukan
 
-Pastikan user yang menjalankan Node.js mempunyai permission membaca directory target.
+Periksa environment variable.
 
-Linux/macOS:
-
-```bash
-ls -la /path/to/project
-```
-
-Windows:
-
-```powershell
-Get-Acl "D:\Projects\my-app"
-```
-
----
-
-## Server tidak menemukan file
-
-Periksa:
-
-```text
-FILE_MAPPER_ROOT
-```
-
-Contoh PowerShell:
+PowerShell:
 
 ```powershell
 echo $env:FILE_MAPPER_ROOT
@@ -784,7 +918,7 @@ Linux/macOS:
 echo $FILE_MAPPER_ROOT
 ```
 
-Jika tidak diset, pastikan command dijalankan dari directory yang benar.
+Pastikan directory benar-benar ada.
 
 ---
 
@@ -792,34 +926,33 @@ Jika tidak diset, pastikan command dijalankan dari directory yang benar.
 
 Periksa:
 
-1. Path `build/index.js`
-2. Node.js tersedia di PATH
+1. Package sudah terinstall
+2. `file-mapper-mcp` tersedia di PATH
 3. `FILE_MAPPER_ROOT` valid
 4. JSON configuration valid
 5. Claude Desktop sudah direstart
-6. Project sudah menjalankan `npm run build`
-
-Tes server secara manual:
-
-```bash
-node build/index.js
-```
+6. Node.js sudah terinstall
+7. Root directory memiliki permission yang sesuai
 
 ---
 
-# 🛡️ Security Recommendations
+# 🔒 Security Recommendations
 
-Untuk production atau penggunaan bersama AI agents:
+Jangan memberikan filesystem access lebih luas daripada yang diperlukan.
 
-### Gunakan root directory spesifik
-
-Disarankan:
+### Recommended
 
 ```text
-D:\Projects\my-app
+D:\Projects\my-project
 ```
 
-Tidak disarankan:
+### Avoid
+
+```text
+D:\
+```
+
+atau:
 
 ```text
 C:\
@@ -831,140 +964,244 @@ atau:
 /
 ```
 
-### Jangan expose secret directory
+Terutama jika agent dapat membaca file sensitif.
 
-Hindari memberikan akses ke directory yang berisi:
+Perhatikan juga file seperti:
 
 ```text
 .env
-SSH keys
-credentials
-API keys
-private certificates
-database dumps
-password files
+.env.production
+credentials.json
+service-account.json
+id_rsa
+id_ed25519
+*.pem
+*.key
+database.sql
 ```
 
-Gunakan project root yang memang diperlukan oleh agent.
+Sebaiknya directory yang mengandung secret tidak diberikan sebagai root MCP.
 
 ---
 
-# 📚 Technology Stack
+# 🎯 Use Cases
 
-Built with:
+## AI Coding Agents
 
-* **Node.js**
-* **TypeScript**
-* **Model Context Protocol SDK**
-* **Zod**
-* **stdio transport**
+Membantu agent memahami repository sebelum melakukan perubahan kode.
 
-Core dependencies:
+## Codebase Analysis
+
+Menganalisis struktur aplikasi dan hubungan antar file.
+
+## Repository Exploration
+
+Menemukan source code yang relevan secara cepat.
+
+## Local AI Agents
+
+Memberikan filesystem tools kepada AI agent lokal.
+
+## Developer Automation
+
+Menggunakan MCP sebagai interface filesystem untuk automation.
+
+## AI Code Review
+
+Membantu agent menemukan file dan membaca bagian kode yang relevan.
+
+## Project Documentation
+
+Mengeksplorasi struktur project untuk menghasilkan dokumentasi.
+
+---
+
+# 🧰 Technology Stack
+
+Project ini menggunakan:
+
+* Node.js
+* TypeScript
+* Model Context Protocol SDK
+* Zod
+* stdio transport
+
+Dependencies utama:
 
 ```text
 @modelcontextprotocol/sdk
 zod
 ```
 
----
-
-# 📦 NPM Package
-
-Package name:
+Development dependencies:
 
 ```text
-file-mapper-mcp
+typescript
+@types/node
 ```
-
-CLI name:
-
-```text
-file-mapper-mcp
-```
-
-Package configuration menggunakan:
-
-```json
-{
-  "bin": {
-    "file-mapper-mcp": "build/index.js"
-  }
-}
-```
-
-Setelah package dipublish ke npm, penggunaan global dapat dilakukan dengan:
-
-```bash
-npm install -g file-mapper-mcp
-```
-
-Kemudian:
-
-```bash
-file-mapper-mcp
-```
-
-> Jika package belum dipublish ke npm, gunakan repository build/install workflow terlebih dahulu.
 
 ---
 
-# 🔍 SEO Keywords
+# 🗺️ Roadmap
 
-Keywords yang relevan untuk project ini:
+* [x] Directory mapping
+* [x] Directory listing
+* [x] Filename search
+* [x] Content search
+* [x] File metadata
+* [x] File reading
+* [x] Markdown output
+* [x] JSON output
+* [x] Root directory security
+* [x] Path traversal protection
+* [x] Windows support
+* [x] Linux support
+* [x] macOS support
+* [x] npm package
+* [ ] Comprehensive automated tests
+* [ ] Git-aware exploration
+* [ ] `.gitignore` aware filtering
+* [ ] Configurable ignore patterns
+* [ ] Multiple allowed roots
+* [ ] File change watcher
+* [ ] Streaming large files
+* [ ] Performance optimization for very large repositories
+* [ ] More MCP client examples
+* [ ] CI/CD pipeline
+* [ ] Automated npm publishing
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+Clone repository:
+
+```bash
+git clone https://github.com/Strong-Bee/file-mapper-mcp.git
+cd file-mapper-mcp
+```
+
+Install:
+
+```bash
+npm install
+```
+
+Build:
+
+```bash
+npm run build
+```
+
+Create branch:
+
+```bash
+git checkout -b feature/my-feature
+```
+
+After making changes:
+
+```bash
+npm run build
+```
+
+Submit a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+# 👤 Author
+
+**Lintang Syahdewo**
+
+GitHub:
+
+```text
+https://github.com/Strong-Bee
+```
+
+Project:
+
+```text
+https://github.com/Strong-Bee/file-mapper-mcp
+```
+
+NPM:
+
+```text
+https://www.npmjs.com/package/@lintang16/file-mapper-mcp
+```
+
+---
+
+# ⭐ Support the Project
+
+Jika `file-mapper-mcp` membantu workflow AI atau development Anda:
+
+* ⭐ Star repository
+* 🐛 Report bugs
+* 💡 Request features
+* 🔧 Submit Pull Request
+* 📢 Share project
+
+---
+
+# 🔎 SEO Keywords
 
 ```text
 MCP server
 Model Context Protocol
 MCP filesystem
-MCP filesystem server
 filesystem MCP
+filesystem MCP server
 file mapper MCP
 file system MCP
+AI filesystem
 AI filesystem tools
 AI coding agent
 AI coding assistant
+AI developer tools
+AI codebase explorer
+AI repository analyzer
+AI project analyzer
+codebase analysis
+repository analysis
+source code analysis
+MCP file reader
+MCP file search
+MCP directory mapper
+MCP filesystem server
 Claude MCP
 Claude Desktop MCP
 Cursor MCP
+Node.js MCP
 Node.js MCP server
 TypeScript MCP server
+TypeScript filesystem
 secure filesystem MCP
 local filesystem MCP
-MCP file reader
-MCP directory mapper
-MCP file search
-MCP codebase explorer
-AI codebase explorer
-AI repository analysis
-AI project analyzer
-source code MCP
-local AI agent tools
-developer MCP server
-MCP tools for developers
-MCP server TypeScript
-MCP server Node.js
+local AI agent
+developer MCP
+MCP developer tools
+MCP automation
 Model Context Protocol filesystem
 secure MCP server
-cross platform MCP
+cross-platform MCP
+AI coding tools
 ```
 
 ---
 
-# 🔎 Search Engine Description
+# 🏷️ Recommended GitHub Topics
 
-**Short description:**
-
-> Secure and lightweight MCP server for mapping directories, searching files, inspecting metadata, and reading project files with AI agents.
-
-**Long description:**
-
-> file-mapper-mcp is a lightweight, secure, cross-platform Model Context Protocol server for AI coding agents. It provides structured filesystem tools for directory mapping, file listing, filename and content search, metadata inspection, and text file reading with path traversal protection and configurable root directories.
-
----
-
-# 🏷️ Topics
-
-Recommended GitHub repository topics:
+Tambahkan topic berikut pada GitHub repository:
 
 ```text
 mcp
@@ -986,124 +1223,63 @@ claude-desktop
 cursor
 automation
 repository-analysis
+file-search
 ```
 
 ---
 
-# 📈 SEO-Friendly Project Title
+# 📈 SEO Description
 
-Recommended title:
+### Short Description
 
-```text
-file-mapper-mcp — Secure Filesystem MCP Server for AI Coding Agents
-```
+> Secure and lightweight MCP filesystem server for AI coding agents to map directories, search files, inspect metadata, and read project files.
 
-Alternative:
+### Long Description
 
-```text
-file-mapper-mcp — Model Context Protocol Filesystem & Codebase Explorer
-```
+> `@lintang16/file-mapper-mcp` is a secure, lightweight, cross-platform Model Context Protocol server for AI coding agents. It provides structured filesystem tools for directory mapping, file listing, filename and content search, file metadata inspection, and text file reading with configurable root access and path traversal protection.
 
 ---
 
-# 🤝 Contributing
+# 🚀 Quick Reference
 
-Contributions, bug reports, feature requests, and improvements are welcome.
-
-Typical workflow:
+Install:
 
 ```bash
-git clone https://github.com/Strong-Bee/file-mapper-mcp.git
-
-cd file-mapper-mcp
-
-npm install
-
-npm run build
+npm i @lintang16/file-mapper-mcp
 ```
 
-Create a feature branch:
+Global:
 
 ```bash
-git checkout -b feature/my-feature
+npm i -g @lintang16/file-mapper-mcp
 ```
 
-Make your changes and verify:
+Run:
 
 ```bash
-npm run build
+file-mapper-mcp
 ```
 
-Then submit a pull request.
+Configure root:
 
----
+```powershell
+$env:FILE_MAPPER_ROOT = "D:\Projects\my-project"
+```
 
-# 🗺️ Roadmap
-
-Potential future improvements:
-
-* [ ] npm package publishing
-* [ ] Additional MCP filesystem tools
-* [ ] Advanced glob filtering
-* [ ] Git-aware project mapping
-* [ ] `.gitignore` aware traversal
-* [ ] Binary file detection
-* [ ] Better large-file handling
-* [ ] Streaming file reads
-* [ ] Configurable ignore patterns
-* [ ] Multiple allowed roots
-* [ ] Config file support
-* [ ] More MCP clients examples
-* [ ] Automated test suite
-* [ ] Performance benchmarks
-* [ ] File change watching
-* [ ] Optional project indexing
-* [ ] Large repository optimization
-
----
-
-# 📄 License
-
-This project is licensed under the **MIT License**.
-
-See:
+Available tools:
 
 ```text
-LICENSE
-```
-
-for more information.
-
----
-
-# 👤 Author
-
-Created and maintained by **Strong-Bee / Cyber Technology Project**.
-
-GitHub:
-
-```text
-https://github.com/Strong-Bee/file-mapper-mcp
+map_directory
+list_directory
+search_files
+file_info
+read_file
 ```
 
 ---
 
-# ⭐ Support
+## Built for AI Agents
 
-If this project is useful for your AI agent, MCP workflow, or development environment:
+**`file-mapper-mcp` gives AI agents a structured, secure, and efficient way to explore project files through the Model Context Protocol.**
 
-* ⭐ Star the repository
-* 🐛 Report bugs
-* 💡 Suggest features
-* 🔧 Submit pull requests
-* 📢 Share the project with other MCP developers
-
----
-
-## Keywords
-
-**MCP Server · Model Context Protocol · Filesystem MCP · File Mapper · AI Coding Agent · AI Coding Assistant · Claude MCP · Claude Desktop · Cursor MCP · Node.js · TypeScript · Codebase Explorer · Repository Analysis · File Search · Directory Mapper · Secure Filesystem · Local AI Agent · Developer Tools · AI Developer Tools**
-
----
-
-**Built for AI agents that need structured, secure, and efficient access to project files.**
+⭐ **Star the repository:** `Strong-Bee/file-mapper-mcp`
