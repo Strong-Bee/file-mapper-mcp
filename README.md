@@ -1,3 +1,33 @@
+<p align="center">
+  <img src="./public/logo.png" alt="file-mapper-mcp logo" width="180">
+</p>
+
+<h1 align="center">file-mapper-mcp</h1>
+
+<p align="center">
+  Secure, lightweight, cross-platform filesystem MCP server for AI coding agents.
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@lintang16/file-mapper-mcp">
+    <img src="https://img.shields.io/npm/v/@lintang16/file-mapper-mcp.svg" alt="npm version">
+  </a>
+  <a href="https://www.npmjs.com/package/@lintang16/file-mapper-mcp">
+    <img src="https://img.shields.io/npm/dm/@lintang16/file-mapper-mcp.svg" alt="npm downloads">
+  </a>
+  <a href="https://github.com/Strong-Bee/file-mapper-mcp">
+    <img src="https://img.shields.io/github/stars/Strong-Bee/file-mapper-mcp?style=social" alt="GitHub stars">
+  </a>
+  <img src="https://img.shields.io/badge/Node.js-18%2B-green.svg" alt="Node.js 18+">
+  <img src="https://img.shields.io/badge/TypeScript-5.x-blue.svg" alt="TypeScript">
+  <img src="https://img.shields.io/badge/MCP-Model%20Context%20Protocol-purple.svg" alt="Model Context Protocol">
+</p>
+
+---
+
+## 🔎 file-mapper-mcp
+
+`@lintang16/file-mapper-mcp` adalah **Model Context Protocol (MCP) server** berbasis Node.js dan TypeScript yang memberikan AI agent akses terstruktur dan aman ke filesystem project.
 # file-mapper-mcp
 
 [![npm version](https://img.shields.io/npm/v/@lintang16/file-mapper-mcp.svg)](https://www.npmjs.com/package/@lintang16/file-mapper-mcp)
