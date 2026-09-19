@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/logo.png" alt="file-mapper-mcp logo" width="180">
+  <img src="./public/logo1.png" alt="file-mapper-mcp logo" width="180">
 </p>
 
 <h1 align="center">file-mapper-mcp</h1>
