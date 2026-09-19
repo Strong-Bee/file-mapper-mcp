@@ -1,6 +1,6 @@
 {
-  "name": "file-mapper-mcp",
-  "version": "1.0.0",
+  "name": "@lintang16/file-mapper-mcp",
+  "version": "1.1.0",
   "description": "MCP server untuk memetakan struktur direktori, mencari, dan membaca file dengan aman",
   "type": "module",
   "main": "build/index.js",
