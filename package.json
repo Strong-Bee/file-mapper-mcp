@@ -1,0 +1,32 @@
+{
+  "name": "file-mapper-mcp",
+  "version": "1.0.0",
+  "description": "MCP server untuk memetakan struktur direktori, mencari, dan membaca file dengan aman",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "file-mapper-mcp": "build/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc && node -e \"try{require('fs').chmodSync('build/index.js','755')}catch(e){}\"",
+    "start": "node build/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "filesystem"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
