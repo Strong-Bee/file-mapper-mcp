@@ -1,6 +1,6 @@
 {
   "name": "@lintang16/file-mapper-mcp",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Codebase Architect MCP — menganalisis arsitektur project (tech stack, framework, entry point, komposisi kode), memetakan struktur direktori, mencari, dan membaca file dengan aman.",
   "type": "module",
   "main": "build/index.js",
