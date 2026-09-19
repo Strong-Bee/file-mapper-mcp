@@ -2,7 +2,7 @@
   <img src="./public/logo1.png" alt="file-mapper-mcp logo" width="180">
 </p>
 
-<h1 align="center">file-mapper-mcp</h1>
+<h1 align="center">File-Mapper-MCP</h1>
 
 <p align="center">
   Secure, lightweight, cross-platform filesystem MCP server for AI coding agents.
@@ -23,7 +23,7 @@
   <img src="https://img.shields.io/badge/MCP-Model%20Context%20Protocol-purple.svg" alt="Model Context Protocol">
 </p>
 
-### 🏛️ Codebase Architect MCP
+### 🏛️ File-Mapper-MCP
 
 MCP server untuk memahami sebuah codebase secara cepat: deteksi tech stack &
 framework, entry point aplikasi, komposisi kode per bahasa, sampai pemetaan
